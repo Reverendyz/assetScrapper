@@ -1,0 +1,20 @@
+{
+  "Assets": [
+    {
+      "RECR11": {
+        "Previous": {
+          "Yeld": "1,1357",
+          "Price": "101,26",
+          "BaseDate": "07/07/2022",
+          "PaymentDate": "14/07/2022"
+        },
+        "Next": {
+          "Yeld": "-",
+          "Price": "-",
+          "BaseDate": "-",
+          "PaymentDate": "-"
+        }
+      }
+    }
+  ]
+}
