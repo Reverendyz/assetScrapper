@@ -5,7 +5,7 @@ import tkinter as tk
 from tkinter import StringVar, ttk
 
 
-URL = "https://statusinvest.com.br/fundos-imobiliarios/recr11"
+URL = "https://statusinvest.com.br/fundos-imobiliarios/rztr11"
 
 def main():
 

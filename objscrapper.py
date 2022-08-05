@@ -1,10 +1,11 @@
-from cgitb import text
 import json
 from bs4 import BeautifulSoup as bs
 import requests
 
+
 class ObjectScrapper:
     def __init__(self):
+        self.filename = 'teste.json'
         pass
 
     def scrape(self, link_to_scrape):
@@ -16,8 +17,9 @@ class ObjectScrapper:
             r = requests.get(link_to_scrape)
 
             soup = bs(r.content, 'html.parser')
-
-            with open("teste.json", "w") as f:
+            
+            with open(self.filename, "w") as f:
+                value = soup.find_all('strong', class_="fs-5")
                 assets = soup.find_all('b', class_="sub-value")
                 asset_name = soup.find("h1", class_="lh-4")
                 print(asset_name.text)
@@ -29,12 +31,14 @@ class ObjectScrapper:
                 stocks = [{
                     f'{asset_name.text.split("-")[0].strip()}': {
                         "Previous": {
+                            "Value": value[0].text,
                             "Yeld": assets[0].text,
                             "Price": assets[1].text,
                             "BaseDate" : assets[2].text,
                             "PaymentDate": assets[3].text
                         },
                         "Next": {
+                            "Value": value[1].text,
                             "Yeld": assets[4].text,
                             "Price": assets[5].text,
                             "BaseDate" : assets[6].text,

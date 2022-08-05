@@ -1,18 +1,20 @@
 {
   "Assets": [
     {
-      "RECR11": {
+      "RZTR11": {
         "Previous": {
-          "Yeld": "1,1357",
-          "Price": "101,26",
-          "BaseDate": "07/07/2022",
-          "PaymentDate": "14/07/2022"
+          "Value": "1,2500",
+          "Yeld": "1,2352",
+          "Price": "101,20",
+          "BaseDate": "30/06/2022",
+          "PaymentDate": "07/07/2022"
         },
         "Next": {
-          "Yeld": "-",
-          "Price": "-",
-          "BaseDate": "-",
-          "PaymentDate": "-"
+          "Value": "1,2500",
+          "Yeld": "1,2267",
+          "Price": "101,90",
+          "BaseDate": "29/07/2022",
+          "PaymentDate": "05/08/2022"
         }
       }
     }
