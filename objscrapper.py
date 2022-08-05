@@ -29,23 +29,13 @@ class ObjectScrapper:
 
 	def __get_content(self, link_to_scrape):
 		r = requests.get(link_to_scrape)
-		print(r.status_code)
 		return BeautifulSoup(r.content, 'html.parser')
 		
-			
-	
-
-	def __get_content_list(self, URL_List):
-		contents = list(map(lambda site: self.__get_content(site), URL_List))
-		objList = []
-		for html in contents:
-			if html.find('span', class_='fw-900').__contains__(f'OPS. . .'):
-				print(f'This is not an valid asset')
-				continue
-			value = html.find_all('strong', class_="fs-5")
-			assets = html.find_all('b', class_="sub-value")
-			asset_name = html.find('h1', class_="lh-4")
-			stocks = [{
+	def format_list(self, content):
+		value = content.find_all('strong', class_="fs-5")
+		assets = content.find_all('b', class_="sub-value")
+		asset_name = content.find('h1', class_="lh-4")
+		return [{
 					f'{asset_name.text.split("-")[0].strip()}': {
 						"Previous": {
 							"Value": value[0].text,
@@ -63,7 +53,15 @@ class ObjectScrapper:
 						}
 					}
 				}]
-			# print(stocks)
+
+	def __get_content_list(self, URL_List):
+		contents = list(map(lambda site: self.__get_content(site), URL_List))
+		objList = []
+		for html in contents:
+			if html.find('span', class_='fw-900').__contains__(f'OPS. . .'):
+				print(f'This is not an valid asset')
+				continue
+			stocks = self.format_list(html)
 			objList.append(stocks)
 		return objList
 
@@ -86,6 +84,7 @@ class ObjectScrapper:
 		if scrape_this == '':
 				print(f'URL is empty')
 				return
+
 		if type(scrape_this) == list:
 			contents = self.__get_content_list(scrape_this)
 			self.__append_json(contents)
@@ -94,32 +93,11 @@ class ObjectScrapper:
 			soup = self.__get_content(scrape_this)
 				
 			with open(self.filename, "w") as f:
-				value = soup.find_all('strong', class_="fs-5")
-				assets = soup.find_all('b', class_="sub-value")
-				asset_name = soup.find("h1", class_="lh-4")
-				print(asset_name.text)
 				constructor = {
 					"Assets":{
 						}
 				}
-				stocks = [{
-					f'{asset_name.text.split("-")[0].strip()}': {
-						"Previous": {
-							"Value": value[0].text,
-							"Yeld": assets[0].text,
-							"Price": assets[1].text,
-							"BaseDate" : assets[2].text,
-							"PaymentDate": assets[3].text
-						},
-						"Next": {
-							"Value": value[1].text,
-							"Yeld": assets[4].text,
-							"Price": assets[5].text,
-							"BaseDate" : assets[6].text,
-							"PaymentDate": assets[7].text
-						}
-					}
-				}]
+				stocks = self.format_list(soup)
 				constructor["Assets"] = stocks
 				f.write(json.dumps(constructor, indent=2))
 			
