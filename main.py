@@ -1,22 +1,17 @@
-import json
+
 from objscrapper import ObjectScrapper
 
 import tkinter as tk
 from tkinter import StringVar, ttk
 
 
-URL = "https://statusinvest.com.br/fundos-imobiliarios/rztr11"
+URL = ["https://statusinvest.com.br/fundos-imobiliarios/rztr11", "https://statusinvest.com.br/fundos-imobiliarios/tord11"]
 
 def main():
 
     scrape = ObjectScrapper()
 
     scrape.scrape(URL)
-
-def __load_json():
-    FILE = 'teste.json'
-    file = open(FILE, 'w') 
-    return json.loads(file)
 
 
 def open_gui():
