@@ -1,28 +1,50 @@
 import json
-import multiprocessing
+from operator import contains
 import os
-from re import L
 from bs4 import BeautifulSoup
 import requests
-from multiprocessing import Pool
-
 
 class ObjectScrapper:
 	def __init__(self):
 		self.filename = 'teste.json'
 		pass
 
+
+	def __create_main_file(self):
+		"""Creates main file for usage if file is not existent
+
+		"""
+		with open(self.filename, 'w') as file:
+			constructor = {
+				"Assets":{
+					}
+			}
+			constructor["Assets"] = []
+			file.write(json.dumps(constructor, indent=2))
+			file.close
+	def read_outfile(self):
+		with open(self.filename, 'r') as file:
+			print(file.read())
+			file.close()
+
 	def __get_content(self, link_to_scrape):
 		r = requests.get(link_to_scrape)
+		print(r.status_code)
 		return BeautifulSoup(r.content, 'html.parser')
+		
+			
+	
 
 	def __get_content_list(self, URL_List):
-		contents = list(map(lambda site: BeautifulSoup(requests.get(site).content, 'html.parser'), URL_List))
+		contents = list(map(lambda site: self.__get_content(site), URL_List))
 		objList = []
 		for html in contents:
+			if html.find('span', class_='fw-900').__contains__(f'OPS. . .'):
+				print(f'This is not an valid asset')
+				continue
 			value = html.find_all('strong', class_="fs-5")
 			assets = html.find_all('b', class_="sub-value")
-			asset_name = html.find("h1", class_="lh-4")
+			asset_name = html.find('h1', class_="lh-4")
 			stocks = [{
 					f'{asset_name.text.split("-")[0].strip()}': {
 						"Previous": {
@@ -47,7 +69,7 @@ class ObjectScrapper:
 
 	def __append_json(self, object_list):
 		if not os.path.isfile(self.filename):
-				raise FileNotFoundError
+				self.__create_main_file()
 
 		json_file = open(self.filename)
 		a = json.load(json_file)
@@ -55,14 +77,15 @@ class ObjectScrapper:
 		for asset in object_list:
 			a["Assets"].append(asset[0])
 
-		with open('newtest.json', 'w+') as json_out:
+		with open(self.filename, 'w+') as json_out:
 				json.dump(a, json_out, indent=2)
 		
 
 
 	def scrape(self, scrape_this):
 		if scrape_this == '':
-				return		
+				print(f'URL is empty')
+				return
 		if type(scrape_this) == list:
 			contents = self.__get_content_list(scrape_this)
 			self.__append_json(contents)
