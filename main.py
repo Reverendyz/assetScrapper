@@ -28,20 +28,6 @@ def read_assets():
     except:
         raise FileNotFoundError
 
-def open_gui():
-    root = tk.Tk()
-
-    root.geometry("640x420")
-    root.title("Assets control")
-    root.resizable(False, False)
-
-    lf = tk.LabelFrame(root, text='Assets')
-
-    
-
-    root.mainloop()
-
-
 if __name__ == "__main__":
     while(True):
         main()
