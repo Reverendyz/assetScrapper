@@ -43,16 +43,18 @@ class ObjectScrapper:
 
 	def scrape(self, assets: list[str]) -> None:
 		try:
-			test = {
+			structure = {
 				"Assets": {
 
 				}
 			}
 			for asset in assets:
 				self.__checkurl(asset)
-				test["Assets"] = self.__get_data(asset)
+				structure["Assets"] = self.__get_data(asset)
+
 			with open(self.filename, "w") as w:
-				w.write(json.dumps(test,indent=4))
+				w.write(json.dumps(structure, indent=4))
+				
 		except Exception as url_error:
 			print(url_error)
 		
