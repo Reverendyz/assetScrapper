@@ -5,7 +5,7 @@ import re
 
 class ObjectScrapper:
 	def __init__(self):
-		self.filename = 'teste.json'
+		self.filename = 'assets.json'
 		pass
 
 	def __checkurl(self, asset: str):
@@ -26,7 +26,7 @@ class ObjectScrapper:
 		yelds = div.find_all("strong")
 		fields = div.find_all("b", class_="sub-value fs-4 lh-3")
 		
-		return [{
+		return {
 			f"{asset_name}":{
 				"Previous": {
 					"Value": yelds[0].text,
@@ -39,7 +39,7 @@ class ObjectScrapper:
 					"PaymentDate": fields[7].text
 				}
 			}
-		}]
+		}
 
 	def scrape(self, assets: list[str]) -> None:
 		try:
@@ -48,10 +48,12 @@ class ObjectScrapper:
 
 				}
 			}
+			li=[]
 			for asset in assets:
 				self.__checkurl(asset)
-				structure["Assets"] = self.__get_data(asset)
+				li.append(self.__get_data(asset))
 
+			structure["Assets"] = li
 			with open(self.filename, "w") as w:
 				w.write(json.dumps(structure, indent=4))
 				
