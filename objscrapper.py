@@ -1,107 +1,58 @@
 import json
-from operator import contains
-import os
 from bs4 import BeautifulSoup
 import requests
+import re
 
 class ObjectScrapper:
 	def __init__(self):
 		self.filename = 'teste.json'
 		pass
 
+	def __checkurl(self, asset: str):
+		r = requests.get(f"https://statusinvest.com.br/fundos-imobiliarios/{asset}")
 
-	def __create_main_file(self):
-		"""Creates main file for usage if file is not existent
+		links = re.findall(r"link.href.*\b", r.text)
 
-		"""
-		with open(self.filename, 'w') as file:
-			constructor = {
-				"Assets":{
-					}
-			}
-			constructor["Assets"] = []
-			file.write(json.dumps(constructor, indent=2))
-			file.close
-	def read_outfile(self):
-		with open(self.filename, 'r') as file:
-			print(file.read())
-			file.close()
+		for link in links:
+			if(link.__contains__("error")):
+				raise Exception(f"This asset '{asset}' was not found in Statusinvest/fundos-imobiliarios")
 
-	def __get_content(self, link_to_scrape):
-		r = requests.get(link_to_scrape)
-		return BeautifulSoup(r.content, 'html.parser')
+	def __get_data(self, asset: str):
+		r = requests.get(f"https://statusinvest.com.br/fundos-imobiliarios/{asset}")
+		soup = BeautifulSoup(r.text, "html.parser")
+
+		div = soup.find("div", class_="mt-5 d-flex flex-wrap flex-lg-nowrap justify-between")
+		asset_name = soup.find("h1", class_="lh-4").text[:6]
+		yelds = div.find_all("strong")
+		fields = div.find_all("b", class_="sub-value fs-4 lh-3")
 		
-	def format_list(self, content):
-		value = content.find_all('strong', class_="fs-5")
-		assets = content.find_all('b', class_="sub-value")
-		asset_name = content.find('h1', class_="lh-4")
 		return [{
-					f'{asset_name.text.split("-")[0].strip()}': {
-						"Previous": {
-							"Value": value[0].text,
-							"Yeld": assets[0].text,
-							"Price": assets[1].text,
-							"BaseDate" : assets[2].text,
-							"PaymentDate": assets[3].text
-						},
-						"Next": {
-							"Value": value[1].text,
-							"Yeld": assets[4].text,
-							"Price": assets[5].text,
-							"BaseDate" : assets[6].text,
-							"PaymentDate": assets[7].text
-						}
-					}
-				}]
-
-	def __get_content_list(self, URL_List):
-		contents = list(map(lambda site: self.__get_content(site), URL_List))
-		objList = []
-		for html in contents:
-			if html.find('span', class_='fw-900').__contains__(f'OPS. . .'):
-				print(f'This is not an valid asset')
-				continue
-			stocks = self.format_list(html)
-			objList.append(stocks)
-		return objList
-
-	def __append_json(self, object_list):
-		if not os.path.isfile(self.filename):
-				self.__create_main_file()
-
-		json_file = open(self.filename)
-		a = json.load(json_file)
-
-		for asset in object_list:
-			a["Assets"].append(asset[0])
-
-		with open(self.filename, 'w+') as json_out:
-				json.dump(a, json_out, indent=2)
-		
-
-
-	def scrape(self, scrape_this):
-		if scrape_this == '':
-				print(f'URL is empty')
-				return
-
-		if type(scrape_this) == list:
-			contents = self.__get_content_list(scrape_this)
-			self.__append_json(contents)
-			return
-		else: #If has one single object to scrape
-			soup = self.__get_content(scrape_this)
-				
-			with open(self.filename, "w") as f:
-				constructor = {
-					"Assets":{
-						}
+			f"{asset_name}":{
+				"Previous": {
+					"Value": yelds[0].text,
+					"BaseDate": fields[2].text,
+					"PaymentDate": fields[3].text
+				},
+				"Next": {
+					"Value": yelds[1].text,
+					"BaseDate": fields[6].text,
+					"PaymentDate": fields[7].text
 				}
-				stocks = self.format_list(soup)
-				constructor["Assets"] = stocks
-				f.write(json.dumps(constructor, indent=2))
-			
-			f.close()
+			}
+		}]
 
-			
+	def scrape(self, assets: list[str]) -> None:
+		try:
+			test = {
+				"Assets": {
 
+				}
+			}
+			for asset in assets:
+				self.__checkurl(asset)
+				test["Assets"] = self.__get_data(asset)
+			with open(self.filename, "w") as w:
+				w.write(json.dumps(test,indent=4))
+		except Exception as url_error:
+			print(url_error)
+		
