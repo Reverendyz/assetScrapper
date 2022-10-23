@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "scrapper"
+version = "1.0.0"
+dependencies = [
+    "requests",
+    "bs4"
+]
+
+[project.scripts]
+scrapper = "scrapper.main:main"
