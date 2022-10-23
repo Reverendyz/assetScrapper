@@ -1,3 +1,4 @@
 *pycache*/
-
+scrapper.egg-info/*
 *.json
+.vscode*
