@@ -1,6 +1,10 @@
 # assetScrapper
 
-Only an asset Scrapper based on `https://statusinvest.com/fundos-imobiliarios/\<TickerToScrape\>` (Ex.: hctr11)
+Only an asset Scrapper based on `https://statusinvest.com/fundos-imobiliarios/<TickerToScrape>` (Ex.: hctr11)
+
+## Prerequisites
+
+- [Python](https://www.python.org/downloads/)
 
 ## Installing
 
