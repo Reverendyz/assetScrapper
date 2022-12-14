@@ -24,7 +24,7 @@ Only an asset Scrapper based on `https://statusinvest.com/fundos-imobiliarios/<T
 
 ### Wheel Install
 
-- you can install this `.whl` by runnning: `pip wheel .` then  `pip install scrapper`
+- you can install this `.whl` by runnning: `pip wheel -w dist .` then  `pip install dist/scrapper`
   - If you're in pipenv, please use `pipenv run` before these commands
   
 ## Getting next payment amount
