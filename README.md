@@ -30,3 +30,4 @@ Only an asset Scrapper based on `https://statusinvest.com/fundos-imobiliarios/<T
 ## Getting next payment amount
 
 - run `jq '[.Assets[] | .Position * .Next.Value] | add' myfile.json` or `scrapper -a hctr11 -p 18 | jq '[.Assets[] | .Position * .Next.Value] | add'`
+  
