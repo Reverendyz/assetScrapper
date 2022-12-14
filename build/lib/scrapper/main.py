@@ -49,12 +49,12 @@ class ObjectScrapper:
 
 				}
 			}
-			asset_list=[]
+			li=[]
 			for index, asset in enumerate(assets):
 				self.__checkurl(asset)
-				asset_list.append(self.__parse_to_object(asset, positions[index]))
+				li.append(self.__parse_to_object(asset, positions[index]))
 
-			structure["Assets"] = asset_list
+			structure["Assets"] = li
 			if(filename):
 				filename = filename.split(".")[0]+".json"
 				with open(filename, "w") as destinaion:
@@ -69,18 +69,15 @@ def main():
 	parser = argparse.ArgumentParser(description="Take assets inside StatusInvest and outputs inside a json file where is located")
 	parser.add_argument("-a","--assets", nargs="+" ,type=str, metavar="asset_list", help="One or many assets to scrape", required=True)
 	parser.add_argument("-o", "--output", type=str, metavar="filename", help="Outputs the data to a .json File")
-	parser.add_argument("-p", "--positions", nargs="+", type=int, help="List of the owned asset position. This must be related with <assets> position", required=True)
+	parser.add_argument("-p", "--position", nargs="+", type=int, help="List of the owned asset position. This must be related with <assets> position", required=True)
 
 	args = parser.parse_args()
-
-	if len(args.assets) != len(args.positions):
-		raise Exception(f"Make sure that assets and position have the same amount of elements Assets:{len(args.assets)} Positions:{len(args.positions)}")
 	
 	scraper = ObjectScrapper()
 	if(not args.output):
-		scraper.scrape(args.assets, args.positions)
+		scraper.scrape(args.assets, args.position)
 		return
-	scraper.scrape(args.assets, args.positions, args.output)
+	scraper.scrape(args.assets, args.output)
 
 if __name__ == "__main__":
 	main()
