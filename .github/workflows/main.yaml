@@ -7,13 +7,13 @@ on:
       - fix/*
       - hotfix/*
       - release/*
+      - main
   pull_request:
     branches:
       - feature/*
       - fix/*
       - hotfix/*
       - release/*
-      - main
 
 jobs:
   build:
