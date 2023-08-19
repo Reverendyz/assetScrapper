@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "scrapper"
-version = "0.2.1"
+version = "0.2.2"
 description = "Scraps statusinvetst website to help you manage your investments (Brazil, only)"
 authors = [ { name = "Felipe ReVz Santos", email = "fmsantos1997@hotmail.com" }]
 dependencies = [
