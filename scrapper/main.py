@@ -17,7 +17,7 @@ class ObjectScrapper:
 
 		for link in links:
 			if(link.__contains__("error") or link.__contains__("Error Code")):
-				raise Exception(f"This asset '{asset}' was not found in Statusinvest/fundos-imobiliarios")
+				raise Exception(f"This asset '{asset}' was not found in Statusinvest")
 
 	def __parse_to_object (self, asset: str, position: Optional[int] = None) ->  dict:
 		r = requests.get(f"https://statusinvest.com.br/fundos-imobiliarios/{asset}",headers={'User-Agent': 'Mozilla/5.0'})
