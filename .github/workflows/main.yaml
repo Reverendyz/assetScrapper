@@ -39,7 +39,7 @@ jobs:
       - id: version_tag
         name: Get version
         run: |
-          if [ ${{ github.ref_name }} != main ]; then suffix="-$(git rev-parse --short HEAD)"; fi
+          if [ ${{ github.ref_name }} != 'main' ]; then suffix="-$(git rev-parse --short HEAD)"; fi
           echo "tag=$(cat pyproject.toml | awk -F"=" '/version/ { gsub(/ /, ""); gsub(/"/,""); print $2 }')$suffix" >> $GITHUB_OUTPUT
   create-release:
     runs-on: ubuntu-latest
