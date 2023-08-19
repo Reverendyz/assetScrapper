@@ -64,11 +64,11 @@ class ObjectScrapper:
 				
 		except Exception as url_error:
 			print(url_error)
-			
+
 def main():
 	parser = argparse.ArgumentParser(description="Take assets inside StatusInvest and outputs inside a json file where is located")
 	parser.add_argument("-a","--assets", nargs="+" ,type=str, metavar="asset_list", help="One or many assets to scrape", required=True)
-	parser.add_argument("-o", "--output", type=str, metavar="filename", help="Outputs the data to a .json File")
+	parser.add_argument("-f", "--filename", type=str, metavar="filename", help="Outputs the data to a .json File")
 	parser.add_argument("-p", "--positions", nargs="+", type=int, help="List of the owned asset position. This must be related with <assets> position", required=True)
 
 	args = parser.parse_args()
